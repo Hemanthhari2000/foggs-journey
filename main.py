@@ -1,4 +1,3 @@
-import nltk
 import en_core_web_sm
 import urllib.request
 from tqdm import tqdm
