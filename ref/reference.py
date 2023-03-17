@@ -36,7 +36,14 @@ def main():
     latAndlong = getLatitudeAndLongitudeFromCityName(locations)
     df = pd.DataFrame(latAndlong, columns=['Place','Lat','Long'])
     df.to_csv("dataset.csv")
-    
+
+def saveDataset():
+    url = 'https://www.gutenberg.org/files/103/103-0.txt'
+    data = getDataFromURL(url)
+    with open("words.txt", "w") as f: 
+        f.write(str(data))
+
 if __name__ == "__main__":
     main()
+    # saveDataset()
     

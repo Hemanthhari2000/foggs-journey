@@ -130,3 +130,12 @@ dmypy.json
 test2.py
 test.py
 dataset.csv
+fresh.py
+df.csv
+empty.txt
+error.csv
+test.csv
+.gitignore
+words.txt
+.gitignore
+*.csv

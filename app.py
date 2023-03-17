@@ -6,10 +6,12 @@ from streamlit_folium import st_folium
 import folium
 import math 
 
+CSV_FILENAME = "df.csv"
+
 st.set_page_config(layout="wide")
 st.title("Around the world in 80 days")
 
-df = pd.read_csv("dataset2.csv")
+df = pd.read_csv(CSV_FILENAME)
 df = df[["Place", "Lat", "Long"]].values.tolist()
 
 locationMap = folium.Map(location=[0,0], zoom_start=2)
@@ -40,33 +42,39 @@ def calculateDistance(lat1, lon1, lat2, lon2, unit):
         dist = dist * 0.8684 
     return dist
 
+latAndLong = list()
+
 for i in range(len(df)): 
+    print(f"CITY #{i+1}: {df[i][0]}")
     popup = folium.Popup(f"City: {df[i][0]}", max_width = 250)
     folium.Marker(location=df[i][1: ], popup=popup, icon=folium.Icon(color="purple")).add_to(locationMap)
-    # if i != 0: 
-    #     cur = df[i-1][1: ]
-    #     nex = df[i][1: ]
-    #     latAndLong.append([cur[0], cur[1], nex[0], nex[1]])
+    if i != 0: 
+        cur = df[i-1][1: ]
+        nex = df[i][1: ]
+        # latAndLong.append([cur[0], cur[1], nex[0], nex[1]])
+        latAndLong.append([cur, nex])
 
-latAndLong = list({})
+# latAndLong = list(set())
 
-for val in df: 
-    latAndLong.append({"lat": val[1], "lon": val[2]})
+# for val in df: 
+#     latAndLong.append({"lat": val[1], "lon": val[2]})
 
-for i in range(len(latAndLong)):
-    latAndLong[i]["distance"] = calculateDistance(latAndLong[0]["lat"], latAndLong[0]["lon"], latAndLong[i]["lat"], latAndLong[i]["lon"], "N")
+# for i in range(len(latAndLong)):
+#     latAndLong[i]["distance"] = calculateDistance(latAndLong[0]["lat"], latAndLong[0]["lon"], latAndLong[i]["lat"], latAndLong[i]["lon"], "N")
 
-def customSort(a,b): 
-    return a["distance"] - b["distance"]
-cmp = functools.cmp_to_key(customSort)
+# def customSort(a,b): 
+#     return a["distance"] - b["distance"]
+# cmp = functools.cmp_to_key(customSort)
 
-latAndLong.sort(key=cmp)
+# latAndLong.sort(key=cmp)
 
-uniqueNodes = []
-for val in latAndLong:
-    uniqueNodes.append([val["lat"], val["lon"]])
+# uniqueNodes = []
+# for val in latAndLong:
+#     uniqueNodes.append([val["lat"], val["lon"]])
 
-folium.PolyLine(uniqueNodes).add_to(locationMap)
+# print(uniqueNodes)
+
+folium.PolyLine(latAndLong).add_to(locationMap)
 
 # folium.PolyLine(([-21.0244816,27.5147504], [35.1820319,35.9449068])).add_to(locationMap)
 # folium.PolyLine(([35.1820319,35.9449068], [48.5536972,-109.677802])).add_to(locationMap)
